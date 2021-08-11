@@ -9,6 +9,7 @@ class MainController extends Controller
 {
     //
 	public function index(){
+		
 		$title = "Main admin page";
 		return view('admin.index', ['title' => $title]);
 	}
