@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 //Admin Controllers
 use App\Http\Controllers\Admin\MainController;
+use App\Http\Controllers\Admin\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,4 +25,5 @@ Route::get('/', function () {
 //Administrator zone
 Route::prefix('management')->group(function(){
 	Route::get('/', [MainController::class, 'index'])->name('admin.index');
+	Route::resource('/categories', CategoryController::class);
 });
