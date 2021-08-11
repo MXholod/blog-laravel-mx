@@ -6,7 +6,9 @@
 <body class="hold-transition sidebar-mini">
 <!-- Site wrapper -->
 <div class="wrapper">
-
+  <!-- Errors/Success -->
+  @include('admin.parent_templates.errors_success_template')
+  <!-- Errors/Succes -->
   <!-- Navbar -->
   @include('admin.parent_templates.top_navbar_template')
   <!-- /.navbar -->
@@ -28,5 +30,18 @@
 <!-- ./wrapper -->
 
 <script src="{{ mix('assets/admin/js/admin.js') }}"></script>
+<script>
+	$(document).ready(function(){
+		$('.nav-sidebar a').each(function(){
+			// http://laravelblog/management/categories
+			let location = window.location.protocol + '//' +window.location.host+window.location.pathname;
+			let link = this.href;//Get attribute from 'href' from the current link
+			if(link == location){
+				$(this).addClass('active');
+				$(this).closest('.has-treeview').addClass('menu-open');
+			}
+		});
+	});
+</script>
 </body>
 </html>
