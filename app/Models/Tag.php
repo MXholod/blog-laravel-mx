@@ -12,6 +12,8 @@ class Tag extends Model
 {
     use HasFactory;
 	
+	protected $fillable = ['title'];
+	
 	//Use this trait for Slug
 	use Sluggable;
 	/**
