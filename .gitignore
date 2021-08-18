@@ -7,6 +7,7 @@
 /public/assets/admin/js
 /public/assets/site/css/main.css
 /public/mix-manifest.json
+/public/downloads
 /resources/assets
 /storage/*.key
 /vendor
