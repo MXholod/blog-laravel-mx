@@ -83,6 +83,26 @@
 					</li>
 				</ul>
               </li>
+			  <li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                  <i class="right fas fa-angle-left"></i>
+                  <p>Posts</p>
+                </a>
+				<ul class="nav nav-treeview">
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('posts.index') }}">
+							<i class="far fa-circle nav-icon"></i>
+							Posts list
+						</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{{ route('posts.create') }}">
+							<i class="far fa-circle nav-icon"></i>
+							Create post
+						</a>
+					</li>
+				</ul>
+              </li>
               <!--<li class="nav-item">
                 <a href="../../index2.html" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
