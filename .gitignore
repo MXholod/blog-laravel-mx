@@ -10,6 +10,7 @@
 /public/downloads
 /resources/assets
 /storage/*.key
+/storage/debugbar
 /vendor
 .env
 .env.backup
