@@ -22,7 +22,9 @@ class PostController extends Controller
     public function index()
     {
         //
-		$posts = Post::paginate(10);
+		//$posts = Post::paginate(10);
+		//These are from Post Model 'category', 'tag'
+		$posts = Post::with('category', 'tags')->paginate(10);
 		$title = "Post list";
 		return view('admin.posts.index',compact('title','posts'));
     }
