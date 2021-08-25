@@ -27,13 +27,26 @@ Route::get('/', function () {
 
 //Administrator zone
 Route::prefix('management')->group(function(){
-	Route::get('/', [MainController::class, 'index'])->name('admin.index');
-	Route::resource('/categories', CategoryController::class);
-	Route::resource('/tags', TagController::class);
-	Route::resource('/posts', PostController::class);
+	//Administrator access middleware 'admin_panel_access'. It was registered in Kernel.php
+	Route::middleware(['admin_panel_access'])->group(function () {
+		Route::get('/', [MainController::class, 'index'])->name('admin.index');
+		Route::resource('/categories', CategoryController::class);
+		Route::resource('/tags', TagController::class);
+		Route::resource('/posts', PostController::class);
+	});
 });
 
-//The form for user registration
-Route::get('register', [UserController::class, 'create'])->name('register.create');
-Route::post('register', [UserController::class, 'store'])->name('register.store');
+//Middleware RedirectIfAuthenticated was changed.If you are 'guest' you will be redirected to home() route.
+//We cannot follow these routes if we are authenticated
+Route::middleware(['guest'])->group(function(){
+	//The form for user registration
+	Route::get('/register', [UserController::class, 'create'])->name('register.create');
+	Route::post('/register', [UserController::class, 'store'])->name('register.store');
+	//Authentication
+	Route::get('/login', [UserController::class, 'loginForm'])->name('login.create');
+	Route::post('/login', [UserController::class, 'login'])->name('login');	
+});
+
+//Middleware 'auth' only for authenticated users
+Route::get('/logout', [UserController::class, 'logout'])->name('logout')->middleware('auth');
 
