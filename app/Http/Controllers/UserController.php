@@ -44,8 +44,44 @@ class UserController extends Controller
 		session()->flash('success', "You have registered" );
 		//Authorize the user
 		Auth::login($user);
-		//Go to the route 'home'
+		//Go to the route 'home' - main page
 		return redirect()->home();
 		//dd($request->all());
+	}
+	//User authentication form
+	public function loginForm(){
+		return view('user.login');
+	}
+	//Authenticate a user
+	public function login(Request $request){
+		//Validation rules
+		$request->validate([
+			'email' => 'required|email',
+			'password' => 'required'
+		]);
+		//Authenticate user by two fields
+		if(Auth::attempt([
+			'email' => $request->email,
+			'password' => $request->password
+		])){
+			session()->flash('success', 'You are logged in');
+			//Check user role. If he is the administrator?
+			if(Auth::user()->is_admin == 1){//Admin - 1, User - 0. Property 'is_admin' from 'users' table
+				$request->session()->regenerate();
+				//return redirect()->route('admin.index');
+				return redirect()->intended(route('admin.index'));
+			}else{
+				//If not Admin. Go to the route 'home' - main page
+				return redirect()->home();
+			}
+		}
+		//If Authentication failed go back to the Authentication page and add the session 'error' - with() method
+		return redirect()->back()->with('error', 'Your e-mail address or password is incorrect');
+		//dd($request->all());
+	}
+	//Logout the user
+	public function logout(Request $request){
+		Auth::logout();
+		return redirect()->route('register.create');
 	}
 }
