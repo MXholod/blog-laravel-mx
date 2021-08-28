@@ -29,6 +29,7 @@ mix.scripts([
 	'resources/assets/admin/js/select2/select2.full.min.js',
 	'resources/assets/admin/js/app.js'
 ], 'public/assets/admin/js/admin.js');
+mix.js(['resources/js/CKEditor.js'], 'public/assets/admin/js/CKEditor.js');
 //mix.copyDirectory('resources/assets/admin/img','public/assets/admin/img');
 mix.copy('resources/assets/admin/css/adminlte.min.css.map','public/assets/admin/css/adminlte.min.css.map');
 mix.copyDirectory('resources/assets/admin/plugins/fontawesome-free/webfonts','public/assets/admin/webfonts');
