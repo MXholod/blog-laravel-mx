@@ -33,6 +33,9 @@ Route::prefix('management')->group(function(){
 		Route::resource('/categories', CategoryController::class);
 		Route::resource('/tags', TagController::class);
 		Route::resource('/posts', PostController::class);
+		//XMLHttpRequest route. CKEditor image store
+		Route::post('/posts/image_store', [PostController::class, 'image_store'])->name('admin.image_upload.store');//XMLHttpRequest route. CKEditor image edit
+		Route::post('/posts/image_edit', [PostController::class, 'image_edit'])->name('admin.image_upload.edit');
 	});
 });
 
