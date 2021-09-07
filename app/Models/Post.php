@@ -4,13 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 //Package that provides Slug
 use Cviebrock\EloquentSluggable\Sluggable;
 
-class Post extends Model
+class Post extends Model implements HasMedia
 {
-    use HasFactory;
+    use HasFactory, InteractsWithMedia;
+	
+	public function registerMediaConversions(Media $media = null): void
+	{
+	   $this->addMediaConversion('thumb')->width(400);
+	}
 	
 	//For mass assignment
 	protected $fillable = ['title','content','description','category_id','thumbnail'];
