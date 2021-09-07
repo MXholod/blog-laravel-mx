@@ -9,6 +9,8 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 
+use Illuminate\Support\Facades\DB;
+
 //This Facade is for deleting images
 use Illuminate\Support\Facades\Storage;
 
@@ -21,7 +23,35 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        //Get rows from 'media' table to delete them. These images did not apply to posts. The condition is:
+		//'post_media.post_id' != 'media.model_id' or 'post_media.image_name' != 'media.name' 
+		//$query = "SELECT m.id, m.name FROM media m INNER JOIN post_media p ON p.post_id != m.model_id OR p.image_name != m.name OR p.media_model_id != m.id";
+		$query = "SELECT id, model_id FROM media WHERE id NOT IN (SELECT media_model_id FROM post_media)";
+		$mediaToDelete = DB::select($query);
+		if(count($mediaToDelete)){
+			//Create string '$ids' from DB query like: '23,24,27' 
+			$ids = '';
+			foreach($mediaToDelete as $mediaDel){
+				$ids .= $mediaDel->id.',';
+			}
+			//Remove the last comma in string from DB query of rows to delete
+			$ids = rtrim($ids, ',');
+			//Let's remove the useless row(s) from 'media' table
+			$deleted = DB::delete("DELETE FROM media WHERE id IN ($ids)");
+			//All folders from the 'spatie' storage folder
+			$spatieAllFolders = [];
+			$directories = Storage::disk('spatie')->listContents();
+			foreach($directories as $dirToDelete){
+				array_push($spatieAllFolders, $dirToDelete['path']);
+			}
+			//Find directories to remove according to '$ids' as array. 'array_intersect' - Computes the convergence of arrays
+			$dirToDel = array_intersect($spatieAllFolders, explode(",", $ids));
+			//Go through the loop to delete folders
+			foreach($dirToDel as $dir){
+				//Delete all folders in 'spatie' storage folder
+				Storage::deleteDirectory('spatie/'.$dir);
+			}
+		}
 		//$posts = Post::paginate(10);
 		//These are from Post Model 'category', 'tag'
 		$posts = Post::with('category', 'tags')->paginate(10);
@@ -61,7 +91,24 @@ class PostController extends Controller
 			//tags[] - is not required
 			'thumbnail' => 'nullable|image' //nullable - means it is not required
 		]);
-		
+		//Create array from JSON (input hidden field 'postImages')
+		$postImages = json_decode($request->postImages);
+		//dd($postImages);
+		$imagesToInsert = [];
+		if(count($postImages)){
+			//Get the future 'id' of the Post Model
+			$query = "SELECT TABLE_NAME, AUTO_INCREMENT AS id FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'laravelblog' AND TABLE_NAME = 'posts'";
+			$model_id = DB::select($query);
+			foreach($postImages as $image){
+				array_push($imagesToInsert, array( 
+					"post_id" => $model_id[0]->id,
+					"media_model_id" => $image->imgId,
+					"image_name" => $image->imgName
+				));
+			}
+			//Save all CKEditor images into DB [ ["post_id" => '4', "image_name" => 'Temple', "media_model_id" => 23], ... ]
+			DB::table('post_media')->insert($imagesToInsert);
+		}
 		$data = $request->all();
 		//Check if the image file has been loaded
 		if($request->hasFile('thumbnail')){
@@ -72,7 +119,6 @@ class PostController extends Controller
 		$post = Post::create($data);
 		//Set tags to the post
 		$post->tags()->sync($request->tags);
-		//dd();
 		
 		//Tag title
 		$postTitle = $request->input('title');
@@ -81,6 +127,29 @@ class PostController extends Controller
 		//Flash message another way 'with()' method
 		return redirect()->route('posts.index')->with('success', "The '{$postTitle}' has been added");
     }
+	/**
+     * Upload images by XMLHttpRequest.
+     *
+     * @param  int  $request
+     * @return \Illuminate\Http\Response
+     */
+	public function image_store(){
+		//Get the future 'id' of the Post Model
+		$query = "SELECT TABLE_NAME, AUTO_INCREMENT AS id FROM information_schema.TABLES WHERE TABLE_SCHEMA = 'laravelblog' AND TABLE_NAME = 'posts'";
+		$model_id = DB::select($query);
+		
+		$post = new Post();
+		if(is_array($model_id)){
+			$post->id = $model_id[0]->id;
+		}
+		$post->exists = true;
+		//Upload is a field of FormData to transfer the file from 'scripts_ckeditor.blade.php' and 'url' also from here
+		$image = $post->addMediaFromRequest('upload')->toMediaCollection('images');
+		return response()->json([
+			'url' => $image->getUrl('thumb'),
+			'imageId' => $image->id
+		]);
+	}
 
     /**
      * Display the specified resource.
@@ -110,7 +179,47 @@ class PostController extends Controller
 		
 		return view('admin.posts.edit', compact('title', 'post', 'categories', 'tags'));
     }
-
+	
+	public function image_edit(Request $request){
+		if($request->isMethod('post')){
+			if($request->input('post_id')){
+				$post = new Post();
+				$post->id = $request->input('post_id');
+				$post->exists = true;
+				//Upload is a field of FormData to transfer the file from 'scripts_ckeditor.blade.php' and 'url' also from here
+				$image = $post->addMediaFromRequest('upload')->toMediaCollection('images');
+				return response()->json([
+					'url' => $image->getUrl('thumb'),
+					'imageId' => $image->id
+				]);
+			}
+		}
+		return response()->json([
+			'url' => "",
+			'imageId' => ""
+		]);
+	}
+	/**
+     * It leaves only unique elements in array by specified key
+     *
+     * @param  array  $array
+     * @param  string  $key
+     * @return array
+     */
+	private function unique_multidim_array($array, $key) {
+		$temp_array = array();
+		$i = 0;
+		$key_array = array();
+	   
+		foreach($array as $val) {
+			if (!in_array($val[$key], $key_array)) {
+				$key_array[$i] = $val[$key];
+				$temp_array[$i] = $val;
+			}
+			$i++;
+		}
+		return $temp_array;
+	}
     /**
      * Update the specified resource in storage.
      *
@@ -129,6 +238,41 @@ class PostController extends Controller
 			//tags[] - is not required
 			'thumbnail' => 'nullable|image' //nullable - means it is not required
 		]);
+		//Get all images from the content place, which are related to the post
+		$imagesRelatedToPost = DB::select('SELECT post_id, image_name, media_model_id FROM post_media WHERE post_id = ?', [$id]);
+		//Create array from JSON (input hidden field 'postImages')
+		$postImages = json_decode($request->postImages);
+		//If post has at least one image. We must add new or update existed
+		if(count($postImages) && count($imagesRelatedToPost) !== 0){
+			//Compare images from 'post_media' table and chosen from View
+			$imagesToInsert = [];
+			//If images are already applied to the post skip them
+			foreach($postImages as $postImg){
+				foreach($imagesRelatedToPost as $tableImg){
+					if($tableImg->post_id == $id && $postImg->imgId !== $tableImg->media_model_id){
+						array_push($imagesToInsert, array('media_model_id' => $postImg->imgId, 'image_name' => $postImg->imgName, "post_id" => $id ));
+					}
+				}
+			}
+			//Insert if the post got new images
+			if(count($imagesToInsert)){
+				$imagesToInsert = $this->unique_multidim_array($imagesToInsert, "media_model_id");
+				DB::table('post_media')->insert($imagesToInsert);
+			}
+		}else{
+			//First time insert images the 'post_media' table is still empty. Get images from the form
+			$arrImagesToUpdate = [];
+			foreach($postImages as $image){
+				array_push($arrImagesToUpdate, array(
+					"post_id" => $id, 
+					"media_model_id" => $image->imgId,
+					"image_name" => $image->imgName
+				));
+			}
+			//Insert all CKEditor images into DB [ ["post_id" => '4', "image_name" => 'Temple', "media_model_id" => 23], ... ]
+			DB::table('post_media')->insert($arrImagesToUpdate);
+		}
+		
 		$post = Post::find($id);
 		//Remember the request 
 		$data = $request->all();
@@ -163,6 +307,33 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
+		//Get all folder names from 'spatie' folder
+		$mediaToDelete = DB::select("SELECT media_model_id FROM post_media WHERE post_id = $id");
+		
+		if(count($mediaToDelete)){
+			//Create string '$ids' from DB query like: '23,24,27' 
+			$ids = '';
+			foreach($mediaToDelete as $mediaDel){
+				$ids .= $mediaDel->media_model_id.',';
+			}
+			//Remove the last comma in string from DB query of rows to delete
+			$ids = rtrim($ids, ',');
+			//Delete all images from 'post_media' table
+			DB::delete("DELETE FROM post_media WHERE post_id = $id");
+			//All folders from the 'spatie' storage folder
+			$spatieAllFolders = [];
+			$directories = Storage::disk('spatie')->listContents();
+			foreach($directories as $dirToDelete){
+				array_push($spatieAllFolders, $dirToDelete['path']);
+			}
+			//Find directories to remove according to '$ids' as array. 'array_intersect' - Computes the convergence of arrays
+			$dirToDel = array_intersect($spatieAllFolders, explode(",", $ids));
+			//Go through the loop to delete folders
+			foreach($dirToDel as $dir){
+				//Delete all folders in 'spatie' storage folder
+				Storage::deleteDirectory('spatie/'.$dir);
+			}
+		}
 		//Find a post to delete
 		$post = Post::find($id);
 		//Delete all bound tags to the current post from the pivot table 'post_tag'
