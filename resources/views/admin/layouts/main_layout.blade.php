@@ -21,13 +21,9 @@
   <!-- /.content-wrapper -->
 
   @include('admin.parent_templates.footer_template')
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
 </div>
 <!-- ./wrapper -->
+@stack('scripts_ckeditor')
 
 <script src="{{ mix('assets/admin/js/admin.js') }}"></script>
 <script>
