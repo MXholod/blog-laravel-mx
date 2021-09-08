@@ -35,7 +35,11 @@ class MyUploadAdapter {
         // integration to choose the right communication channel. This example uses
         // a POST request with JSON as a data structure but your configuration
         // could be different.
-        xhr.open( 'POST', '{{ route('admin.image_upload') }}', true );
+			'@if($post_id)'
+				xhr.open( 'POST', '{{ route('admin.image_upload.edit') }}', true );
+			'@else'
+				xhr.open( 'POST', '{{ route('admin.image_upload.store') }}', true );	
+			'@endif'
 		xhr.setRequestHeader( 'x-csrf-token', '{{ csrf_token() }}' );
         xhr.responseType = 'json';
     }
@@ -69,6 +73,14 @@ class MyUploadAdapter {
 			resolve( {
                 default: response.url
             } );
+			
+			/*resolve( {
+				urls:{
+					default: response.url
+				},
+				//Get the image ID from DB
+				imageId: response.imageId
+            } );*/
         } );
 
         // Upload progress when it is supported. The file loader has the #uploadTotal and #uploaded
@@ -101,7 +113,9 @@ class MyUploadAdapter {
 		
 		//File name using in controller action
         data.append( 'upload', file );
-
+		'@if($post_id)'
+			data.append( 'post_id', '{{ $post_id }}' );
+		'@endif'
         // Important note: This is the right place to implement security mechanisms
         // like authentication and CSRF protection. For instance, you can use
         // XMLHttpRequest.setRequestHeader() to set the request headers containing
@@ -114,11 +128,42 @@ class MyUploadAdapter {
 	
 }//End of class MyUploadAdapter
 
+//Custom Plugin to upload images
 function SimpleUploadAdapterPlugin( editor ) {
-    editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
+	
+    //Add class of custom image upload adapter
+	editor.plugins.get( 'FileRepository' ).createUploadAdapter = ( loader ) => {
         // Configure the URL to the upload script in your back-end here!
         return new MyUploadAdapter( loader );
     };
+	//Watching for changes and get
+	editor.model.document.on('change', (eventInfo, batch) => {
+		//Array of all images within the content place
+		let postImages = Array.from( new DOMParser().parseFromString( editor.getData(), 'text/html' )
+			.querySelectorAll( 'img' ) )
+			.map( img => {
+				//console.log("Image ",img.parent);
+				let imgStr = img.getAttribute( 'src' );
+				if(imgStr){
+					//http://laravelblog/spatie/177/conversions/avatar-thumb.jpg
+					let lastSlashIndex = imgStr.lastIndexOf('/',imgStr.length-1);
+					let imgName = imgStr.substring(lastSlashIndex+1, imgStr.length).replace(/-thumb[\.\w]*/gi,'');
+					//http://laravelblog/spatie/177
+					let imgId = Number(imgStr.split('/')[4]);
+					return { imgName, imgId };
+				}
+			});
+		
+		let id = document.querySelector("#postImages");
+		id.value = JSON.stringify(postImages);
+		
+		/*let selected = eventInfo?.source?.selection?.getSelectedElement();
+		//If image is selected
+		if(selected){
+			console.log( 'The data has changed! 1', selected.getAttribute('src') );
+		}else{
+			console.log( 'The data has changed! 2' );
+		}*/
+	} );
 }
-	
 </script>
