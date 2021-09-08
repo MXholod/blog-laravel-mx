@@ -88,6 +88,7 @@
 					@endif
 				  </div>
                 </div>
+				<input type="hidden" name="postImages" id="postImages" autocomplete="off" />
                 <!-- /.card-body -->
                 <div class="card-footer">
                   <button type="submit" class="btn btn-primary">Update post</button>
@@ -97,3 +98,43 @@
     <!-- /.content -->
   </div>
 @endsection
+
+@push('scripts_ckeditor')
+	@include('admin.parent_templates.scripts_ckeditor', ['post_id' => $post->id])
+	<script>
+	
+		//For description
+		ClassicEditor
+			.create( document.querySelector( '#description' ), {
+				toolbar: {
+					items: [
+						'heading','|','bold','italic','link','bulletedList','numberedList','|',
+						'outdent','indent','|','blockQuote','insertTable','undo','redo'
+					]
+				}
+			} )
+			.catch( error => {
+				console.error( error );
+			} );
+		//For content
+		ClassicEditor
+			.create( document.querySelector( '#content' ),  {
+				extraPlugins: [ SimpleUploadAdapterPlugin ],
+				// Add Image to the plugin list.
+				//plugins: [ window.InsertImage ],
+				image: {
+					toolbar: [ 'imageStyle:inline',
+								'imageStyle:block',
+								'imageStyle:side',
+								'|',
+								'toggleImageCaption',
+								'imageTextAlternative'
+					]
+				}
+			} )
+			.catch( error => {
+				console.error( error );
+			} );
+		
+	</script>
+@endpush
