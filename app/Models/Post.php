@@ -57,4 +57,9 @@ class Post extends Model implements HasMedia
 		}
 		return asset("downloads/{$this->thumbnail}");
 	}
+	
+	//For Slider Model to make 'One To One'
+	public function slider(){
+		return $this->belongsTo(Slider::class,'slug','post_slug');
+	}
 }
