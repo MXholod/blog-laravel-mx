@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
+use App\Models\Slider;
 
 use Illuminate\Support\Facades\DB;
 
@@ -53,8 +54,8 @@ class PostController extends Controller
 			}
 		}
 		//$posts = Post::paginate(10);
-		//These are from Post Model 'category', 'tag'
-		$posts = Post::with('category', 'tags')->paginate(10);
+		//These are from Post Model 'category', 'tag', 'slider'
+		$posts = Post::with('category', 'tags', 'slider')->paginate(10);
 		$title = "Post list";
 		return view('admin.posts.index',compact('title','posts'));
     }
@@ -336,6 +337,31 @@ class PostController extends Controller
 		}
 		//Find a post to delete
 		$post = Post::find($id);
+		//If the slider is attached
+		if(!is_null($post->slider)){
+			//If post has a slider we must delete this slider with its image on the disk
+			if($post->slider->post_slug == $post->slug){
+				//dd($post->slider->path_img);
+				//$slider = Slider::where('post_slug','=',$post->slug)->get();
+				//Check if the file exists
+				if(Storage::disk('public')->exists($post->slider->path_img)) {//'file.jpg'
+					Storage::disk('public')->delete($post->slider->path_img);
+					//Delete Slider from DB
+					$post->slider->delete();
+				}
+				//Find all empty directories and delete them
+				$directories = Storage::disk('public')->directories('slider');
+				foreach($directories as $dir){
+					//Find all files in current directory
+					$files = Storage::disk('public')->files($dir);
+					//If directory is empty delete it
+					if(!count($files)){
+						//Delete empty directory
+						Storage::disk('public')->deleteDirectory($dir);
+					}
+				}
+			}
+		}
 		//Delete all bound tags to the current post from the pivot table 'post_tag'
 		$post->tags()->sync([]);
 		//Try to delete a previous image
