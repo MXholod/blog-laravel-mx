@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\SliderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -25,6 +26,10 @@ Route::get('/', function () {
     return view('home');
 })->name('home');
 
+//Slider on main page. It shows a list of certain posts
+//Route::get('/slider', [SliderController::class, 'index'])->name('slider_post_list.index');
+//Detailed link: /post/{slug}
+
 //Administrator zone
 Route::prefix('management')->group(function(){
 	//Administrator access middleware 'admin_panel_access'. It was registered in Kernel.php
@@ -36,6 +41,8 @@ Route::prefix('management')->group(function(){
 		//XMLHttpRequest route. CKEditor image store
 		Route::post('/posts/image_store', [PostController::class, 'image_store'])->name('admin.image_upload.store');//XMLHttpRequest route. CKEditor image edit
 		Route::post('/posts/image_edit', [PostController::class, 'image_edit'])->name('admin.image_upload.edit');
+		//Slider gallery
+		Route::resource('/slider', SliderController::class);
 	});
 });
 
