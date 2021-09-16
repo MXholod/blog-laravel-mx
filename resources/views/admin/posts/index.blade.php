@@ -44,17 +44,24 @@
 					  <thead>
 						<tr>
 						  <th style="width: 5%">№ (id)</th>
-						  <th style="width: 24%">Post name</th>
+						  <th style="width: 15%">Slider (title)</th>
+						  <th style="width: 20%">Post name</th>
 						  <th style="width: 20%">Category</th>
 						  <th style="width: 20%">Tags</th>
-						  <th style="width: 20%">Date</th>
-						  <th style="width: 11%">Actions</th>
+						  <th style="width: 10%">Date</th>
+						  <th style="width: 10%">Actions</th>
 						</tr>
 					  </thead>
 					  <tbody>
 						@forelse($posts as $post)
 						<tr>
 						  <td>{{ $post->id }}</td>
+						  <td>@if($post->slider)
+								<span style="font-size:.8em;background-color:lightgreen;">{{ $post->slider->title }}</span>
+							  @else
+								<span style="font-size:.8em;background-color:lightgrey;">It's not pinned to the slider</span>
+							  @endif
+						  </td>
 						  <td>{{ $post->title }}</td>
 						  <td>
 							{{ $post->category->title }}
