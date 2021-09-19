@@ -119,9 +119,17 @@ class CategoryController extends Controller
     {
         //Find a category to edit
 		$category = Category::find($id);
-		$category->delete();
-		//$category->destroy($id); //Delete category immediately
-		
-		return redirect()->route('categories.index')->with('success', "The '{$category->title}' has been deleted");
+		//Total post amount
+		$totalPosts = $category->posts->count();
+		//If category hasn't any post
+		if($totalPosts == 0){
+			$category->delete();
+			//$category->destroy($id); //Delete category immediately
+			return redirect()->route('categories.index')->with('success', "The '{$category->title}' has been deleted");
+		}else{
+			//You can't delete these categories they have posts
+			$postsStr = $totalPosts == 1 ? 'has '.$totalPosts.' post' : 'have '.$totalPosts.' posts';
+			return redirect()->route('categories.index')->with('error', "The category '{$category->title}' '{$postsStr}'");
+		}
     }
 }
