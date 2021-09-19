@@ -119,9 +119,18 @@ class TagController extends Controller
     {
         //Find a tag to edit
 		$tag = Tag::find($id);
-		$tag->delete();
-		//$tag->destroy($id); //Delete tag immediately
+		//Total post amount
+		$totalTags = $tag->posts->count();
+		//If tag doesn't use any post
+		if($totalTags == 0){
+			$tag->delete();
+			//$tag->destroy($id); //Delete tag immediately
+			return redirect()->route('tags.index')->with('success', "The '{$tag->title}' has been deleted");
+		}else{
+			//You can't delete these tags they are used with posts
+			$tagsStr = $totalTags == 1 ? 'uses with '.$totalTags.' post' : 'uses with '.$totalTags.' posts';
+			return redirect()->route('tags.index')->with('error', "The '{$tag->title}' '{$tagsStr}'");
+		}
 		
-		return redirect()->route('tags.index')->with('success', "The '{$tag->title}' has been deleted");
     }
 }
