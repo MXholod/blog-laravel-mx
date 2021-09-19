@@ -43,6 +43,10 @@
 		$('.select2bs4').select2({
 			theme: 'bootstrap4'
 		})
+		//Initialize custom file input
+		$(document).ready(function () {
+			bsCustomFileInput.init();
+		});
 	});
 </script>
 </body>
