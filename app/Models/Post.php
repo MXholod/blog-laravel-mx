@@ -11,6 +11,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 //Package that provides Slug
 use Cviebrock\EloquentSluggable\Sluggable;
+use Carbon\Carbon;
 
 class Post extends Model implements HasMedia
 {
@@ -61,5 +62,10 @@ class Post extends Model implements HasMedia
 	//For Slider Model to make 'One To One'
 	public function slider(){
 		return $this->belongsTo(Slider::class,'slug','post_slug');
+	}
+	
+	//Set date format
+	public function setPostDate(){
+		return Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('d F, Y');
 	}
 }
