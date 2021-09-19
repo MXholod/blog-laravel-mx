@@ -29,6 +29,14 @@ mix.scripts([
 	'resources/assets/admin/js/select2/select2.full.min.js',
 	'resources/assets/admin/js/app.js'
 ], 'public/assets/admin/js/admin.js');
+mix.scripts([
+	'resources/assets/site/js/jquery-1.11.1.min.js',
+	'resources/assets/site/js/bootstrap.min.js',
+], 'public/assets/site/js/site.js');
+mix.scripts(['resources/assets/site/js/jssor.js',
+	'resources/assets/site/js/jssor.slider.js',
+	'resources/assets/site/js/slider.js',
+],  'public/assets/site/js/slider.js');
 mix.js(['resources/js/CKEditor.js'], 'public/assets/admin/js/CKEditor.js');
 //mix.copyDirectory('resources/assets/admin/img','public/assets/admin/img');
 mix.copy('resources/assets/admin/css/adminlte.min.css.map','public/assets/admin/css/adminlte.min.css.map');
@@ -65,6 +73,10 @@ mix.sass(
                 {
                     from: 'resources/assets/admin/img', // Путь относительно каталога с webpack.mix.js
                     to: 'assets/admin/img', // Путь относительно каталога public/
+                },
+				{
+                    from: 'resources/assets/site/scss/images', // Путь относительно каталога с webpack.mix.js
+                    to: 'assets/site/images', // Путь относительно каталога public/
                 }
             ]
         }),
