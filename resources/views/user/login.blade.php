@@ -11,7 +11,7 @@
 </head>
 <body class="hold-transition register-page">
 <!-- Errors/Success -->
-  @include('templates.errors_success_template')
+  @include('site.parent_templates.errors_success_template')
 <!-- Errors/Succes -->
 <div class="register-box">
   <div class="register-logo">
