@@ -17,7 +17,7 @@ class CategoryController extends Controller
     {
         //
 		//$categories = [1];
-		$categories = Category::paginate(2);
+		$categories = Category::paginate(5);
 		$title = "Category list";
 		return view('admin.categories.index', compact('title','categories'));
     }
