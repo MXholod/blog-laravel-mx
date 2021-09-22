@@ -47,7 +47,8 @@
 						  <th style="width: 15%">Slider (title)</th>
 						  <th style="width: 20%">Post name</th>
 						  <th style="width: 20%">Category</th>
-						  <th style="width: 20%">Tags</th>
+						  <th style="width: 15%">Tags</th>
+						  <th style="width: 5%">Views</th>
 						  <th style="width: 10%">Date</th>
 						  <th style="width: 10%">Actions</th>
 						</tr>
@@ -72,6 +73,9 @@
 							@else
 								Post hasn't tags
 							@endif
+						  </td>
+						  <td>
+							{{ $post->views }}
 						  </td>
 						  <td>
 							{{ $post->created_at }}
