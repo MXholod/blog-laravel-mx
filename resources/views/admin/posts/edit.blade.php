@@ -81,7 +81,7 @@
 					</div>
 					@if(!$post->getImage())
 						<span class="alert alert-danger" role="alert" style="position:relative;top:1rem;">
-							Message is absent
+							Image is absent
 						</span>
 					@else
 						<img src="{{ $post->getImage() }}" width="160" height="120" alt="Image preview" class="img-thumbnail" style="position:relative;top:1rem;" />
