@@ -8,6 +8,9 @@ use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\PostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\TagController as TagHomeController;
+use App\Http\Controllers\PostController as PostHomeController;
+use App\Http\Controllers\CategoryController as CategoryHomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,9 +25,15 @@ use App\Http\Controllers\Admin\SliderController;
 
 
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('home');
-})->name('home');
+})->name('home');*/
+
+//Home page
+Route::get('/',[PostHomeController::class, 'index'])->name('home');
+Route::get('/tag/{slug}',[TagHomeController::class, 'show'])->name('tags.single');
+Route::get('/post/{slug}',[PostHomeController::class, 'show'])->name('posts.single');
+Route::get('/category/{slug}',[CategoryHomeController::class, 'show'])->name('categories.single');
 
 //Slider on main page. It shows a list of certain posts
 //Route::get('/slider', [SliderController::class, 'index'])->name('slider_post_list.index');
