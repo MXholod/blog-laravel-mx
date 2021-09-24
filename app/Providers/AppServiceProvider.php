@@ -4,9 +4,10 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
-use App\Models\Category;
+//use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -52,8 +53,16 @@ class AppServiceProvider extends ServiceProvider
 		view()->composer('site.parent_templates.footer_template', function($view){
 			//Popular posts
 			$popular_posts = Post::orderBy('views', 'desc')->limit(6)->get();
-			//Recent posts
-			$recent_posts = Post::orderBy('created_at', 'desc')->limit(6)->get();
+			//Caching 6 recently created posts
+			if(Cache::has('recent_posts')){
+				$recent_posts = Cache::get('recent_posts');
+			}else{
+				$recent_posts = Post::orderBy('created_at', 'desc')->limit(6)->get();
+				//For twenty-four hours - 1day: 60sec * 60min * 24hours = 86400sec
+				$day = 60 * 60 * 24;
+				Cache::put('recent_posts', $recent_posts, $day);
+			}
+			//Path data about recent posts into the footer
 			$view->with('popular_posts', $popular_posts)->with('recent_posts', $recent_posts);
 		});
     }
