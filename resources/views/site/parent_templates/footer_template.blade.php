@@ -3,12 +3,14 @@
                 <div class="col-lg-4">
                 	<h1>Popular Posts</h1>
                     <ul class="list-unstyled">
-                    	<li><a href="#">First Post</a></li>
-                        <li><a href="#">First Post</a></li>
-                        <li><a href="#">First Post</a></li>
-                        <li><a href="#">First Post</a></li>
-                        <li><a href="#">First Post</a></li>
-                        <li><a href="#">First Post</a></li>
+                    	@foreach($popular_posts as $popular_post)
+						<li>
+							<a href="{{ route('posts.single', ['slug' => $popular_post->slug]) }}">
+								{{ $popular_post->title }}
+							</a>
+							<span class="popular-post-views">Total views: {{ $popular_post->views }}</span>
+						</li>
+						@endforeach
                     </ul>
                 </div>
                 <div class="col-lg-4">
@@ -24,12 +26,13 @@
                 <div class="col-lg-4">
                 	<h1>Recent Posts</h1>
                 	<ul class="list-unstyled">
-                    	<li><a href="#">First Post</a></li>
-                        <li><a href="#">First Post</a></li>
-                        <li><a href="#">First Post</a></li>
-                        <li><a href="#">First Post</a></li>
-                        <li><a href="#">First Post</a></li>
-                        <li><a href="#">First Post</a></li>
+                    	@foreach($recent_posts as $recent_post)
+						<li>
+							<a href="{{ route('posts.single', ['slug' => $recent_post->slug]) }}">
+								{{ $recent_post->title }}
+							</a>
+						</li>
+						@endforeach
                     </ul>
                 </div>
     </div>
