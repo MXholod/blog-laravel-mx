@@ -23,16 +23,18 @@
 <div class="col-md-8">
     	<h1>{{ $post->title }}</h1>
         <div class="entry-meta table">
-        	<span>
+        	<span> {{ $post->category->title }} </span>
+			<span> / </span>
+			<span>
 				Views: {{ $post->views }}
             </span>
-            <span> / </span>
-            <span> {{ $post->category->title }} </span>
             <span> / </span>
             <span> {{ $post->setPostDate() }} </span>
         </div>
         <div>
-        	<img src="{{ asset($post->getImage()) }}" class="img-responsive" alt="{{ $post->title }}">
+			@isset($post->thumbnail)
+				<img src="{{ asset($post->getImage()) }}" class="img-responsive" alt="{{ $post->title }}">
+			@endisset
         </div>
         <div class="media">
 			{!! $post->content !!}
