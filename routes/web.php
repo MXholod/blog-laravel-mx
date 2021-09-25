@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\SliderController;
 use App\Http\Controllers\TagController as TagHomeController;
 use App\Http\Controllers\PostController as PostHomeController;
 use App\Http\Controllers\CategoryController as CategoryHomeController;
+use App\Http\Controllers\SearchController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +38,8 @@ Route::get('/category/{slug}',[CategoryHomeController::class, 'show'])->name('ca
 
 //Slider on main page. It shows a list of certain posts
 //Route::get('/slider', [SliderController::class, 'index'])->name('slider_post_list.index');
-//Detailed link: /post/{slug}
+//Search posts by title on the client side
+Route::get('/search',[SearchController::class, 'index'])->name('search');
 
 //Administrator zone
 Route::prefix('management')->group(function(){
