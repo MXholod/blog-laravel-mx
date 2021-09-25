@@ -1,7 +1,7 @@
 <div class="col-md-4 top3">
                 <!-- Blog Search Well -->
                 <div class="well">
-                    <h4>Blog Search</h4>
+                    <h4>Search for posts</h4>
                     <div class="input-group">
 						<form method="GET" action="{{ route('search') }}" class="form-search">
 							<input type="text" name="search" required class="form-control @error('search') wrong-search @enderror">
@@ -18,7 +18,7 @@
                 <!-- Blog Categories Well -->
 				@if(count($popular_categories))
                 <div class="well">
-                    <h4>Popular blog Categories</h4>
+                    <h4>Popular categories</h4>
                     <div class="row">
                         @if(count($popular_categories))
 						<div class="col-lg-6">
