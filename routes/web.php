@@ -12,6 +12,7 @@ use App\Http\Controllers\TagController as TagHomeController;
 use App\Http\Controllers\PostController as PostHomeController;
 use App\Http\Controllers\CategoryController as CategoryHomeController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\Admin\SearchController as SearchPostController;
 
 /*
 |--------------------------------------------------------------------------
@@ -46,6 +47,8 @@ Route::prefix('management')->group(function(){
 	//Administrator access middleware 'admin_panel_access'. It was registered in Kernel.php
 	Route::middleware(['admin_panel_access'])->group(function () {
 		Route::get('/', [MainController::class, 'index'])->name('admin.index');
+		//Search posts by title on the client side
+		Route::get('/search',[SearchPostController::class, 'index'])->name('admin.posts.search');
 		Route::resource('/categories', CategoryController::class);
 		Route::resource('/tags', TagController::class);
 		Route::resource('/posts', PostController::class);
