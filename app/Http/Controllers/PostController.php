@@ -12,7 +12,7 @@ class PostController extends Controller
     //
 	public function index(){
 		$sliders = DB::table('slider')->select('title','post_slug','path_img','description')->get();
-		$posts = Post::with('category','tags')->orderBy('id', 'desc')->paginate(2);//->get();
+		$posts = Post::with('category','tags')->orderBy('id', 'desc')->paginate(4);//->get();
 		return view('site.posts.index', compact('sliders','posts'));
 	}
 	//
