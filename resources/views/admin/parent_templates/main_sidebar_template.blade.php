@@ -10,13 +10,16 @@
 
       <!-- SidebarSearch Form -->
       <div class="form-inline">
-        <div class="input-group" data-widget="sidebar-search">
-          <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-          <div class="input-group-append">
-            <button class="btn btn-sidebar">
-              <i class="fas fa-search fa-fw"></i>
-            </button>
-          </div>
+		<span style="color:#fff;padding:2px 2px 2px 5px;">Search for posts</span>
+        <div class="input-group">
+			<form method="GET" action="{{ route('admin.posts.search') }}" style="display:flex;">
+				<input class="form-control form-control-sidebar" name="search" type="search" placeholder="Search" aria-label="Search">
+				<div class="input-group-append">
+					<button class="btn btn-sidebar" type="submit">
+					  <i class="fas fa-search fa-fw"></i>
+					</button>
+				</div>
+			</form>
         </div>
       </div>
 
