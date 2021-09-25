@@ -3,12 +3,14 @@
                 <div class="well">
                     <h4>Blog Search</h4>
                     <div class="input-group">
-                        <input type="text" class="form-control">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">
-                                <i class="fa fa-search"></i>
-                        </button>
-                        </span>
+						<form method="GET" action="{{ route('search') }}" class="form-search">
+							<input type="text" name="search" required class="form-control @error('search') wrong-search @enderror">
+							<span class="input-group-btn">
+								<button class="btn btn-default" type="submit">
+									<i class="fa fa-search"></i>
+								</button>
+							</span>
+						</form>
                     </div>
                     <!-- /.input-group -->
                 </div>
