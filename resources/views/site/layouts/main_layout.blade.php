@@ -20,6 +20,7 @@
 		<!--[if lte IE 8]>
 				<script type="text/javascript" src="http://explorercanvas.googlecode.com/svn/trunk/excanvas.js"></script>
 		<![endif]-->
+		@stack('css')
 		<link rel="stylesheet" type="text/css" href="{{ asset('assets/site/css/main.css') }}">
 	</head>
 	<body>
