@@ -48,6 +48,11 @@ mix.styles([
 	'resources/assets/admin/css/select2/select2-bootstrap4.min.css',
 	'resources/assets/admin/css/select2/select2.min.css'
 ], 'public/assets/admin/css/admin.css');
+mix.styles([
+	'resources/assets/admin/plugins/fontawesome-free/css/all.min.css',
+	'resources/assets/admin/css/select2/select2-bootstrap4.min.css',
+	'resources/assets/admin/css/select2/select2.min.css'
+], 'public/assets/site/css/admin.css');
 // Преобразовываем SASS в CSS
 mix.sass(
     'resources/assets/site/scss/main.scss', // Путь относительно каталога с webpack.mix.js
