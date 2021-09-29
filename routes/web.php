@@ -13,6 +13,7 @@ use App\Http\Controllers\PostController as PostHomeController;
 use App\Http\Controllers\CategoryController as CategoryHomeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Admin\SearchController as SearchPostController;
+use App\Http\Controllers\Admin\PagesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,6 +58,7 @@ Route::prefix('management')->group(function(){
 		Route::post('/posts/image_edit', [PostController::class, 'image_edit'])->name('admin.image_upload.edit');
 		//Slider gallery
 		Route::resource('/slider', SliderController::class);
+		Route::resource('/pages', PagesController::class);
 	});
 });
 
