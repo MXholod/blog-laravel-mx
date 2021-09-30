@@ -33,10 +33,11 @@
 			  <table class="table table-striped table-bordered mt-3">
 				  <thead>
 					<tr>
-					  <th scope="col" style="width:25%">Categories</th>
-					  <th scope="col" style="width:25%">Posts</th>
-					  <th scope="col" style="width:25%">Tags</th>
-					  <th scope="col" style="width:25%">Slides</th>
+					  <th scope="col" style="width:20%">Categories</th>
+					  <th scope="col" style="width:20%">Posts</th>
+					  <th scope="col" style="width:20%">Tags</th>
+					  <th scope="col" style="width:20%">Slides</th>
+					  <th scope="col" style="width:20%">Pages</th>
 					</tr>
 				  </thead>
 				  <tbody>
@@ -45,6 +46,7 @@
 					  <td>{{ $posts->count() }}</td>
 					  <td>{{ $tags->count() }}</td>
 					  <td>{{ $sliders->count() }}</td>
+					  <td>{{ $pages->count() }}</td>
 					</tr>
 				  </tbody>
 				</table>

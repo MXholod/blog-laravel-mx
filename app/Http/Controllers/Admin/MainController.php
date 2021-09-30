@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\Slider;
+use App\Models\Page;
 
 class MainController extends Controller
 {
@@ -19,12 +20,14 @@ class MainController extends Controller
 		$posts = Post::all();
 		$tags = Tag::all();
 		$sliders = Slider::all();
+		$pages = Page::all();
 		return view('admin.index', [
 			'title' => $title,
 			'categories'=> $categories,
 			'posts' => $posts,
 			'tags' => $tags,
-			'sliders' => $sliders
+			'sliders' => $sliders,
+			'pages' => $pages
 		]);
 	}
 }
