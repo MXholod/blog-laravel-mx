@@ -14,6 +14,7 @@ use App\Http\Controllers\CategoryController as CategoryHomeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Admin\SearchController as SearchPostController;
 use App\Http\Controllers\Admin\PagesController;
+use App\Http\Controllers\PagesController as PagesHomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,4 +76,8 @@ Route::middleware(['guest'])->group(function(){
 
 //Middleware 'auth' only for authenticated users
 Route::get('/logout', [UserController::class, 'logout'])->name('logout')->middleware('auth');
+
+//Static pages. where 'pages' = 'slug|slug'
+//Route::get('/{pages}',PagesHomeController::class)->name('pages')->where('pages', 'about-us|contacts|test');
+Route::get('/{pages}',PagesHomeController::class)->name('pages');
 
