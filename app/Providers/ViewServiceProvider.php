@@ -5,6 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 use App\Models\Page;
+//Social Media Share Buttons
+use Share;
+use Illuminate\Support\Facades\URL;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -48,8 +51,15 @@ class ViewServiceProvider extends ServiceProvider
         });
 		// Footer template. Using closure based composers...
         View::composer('site.parent_templates.footer_template', function ($view) use ($footer){
-            //
-			$view->with('footer_links', $footer);
+            //Social Media Share Buttons
+			$social = Share::page(URL::current(), 'Info about the site')
+			->facebook()
+			->twitter()
+			//->telegram()
+			->linkedin('Extra linkedin summary can be passed here')->getRawLinks();
+			//->whatsapp()->getRawLinks();
+			//
+			$view->with('footer_links', $footer)->with('social', $social);
         });
     }
 }
