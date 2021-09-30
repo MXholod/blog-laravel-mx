@@ -15,12 +15,19 @@
                 </div>
                 <div class="col-lg-4">
                 <h1>Like Us</h1>
-                    <div class="text-center">
-                        <a href="https://www.facebook.com/themesrefinery"><i class="fa fa-facebook square"></i></a>
-                        <a href="https://twitter.com/themesrefinery"><i class="fa fa-twitter square"></i></a>
-                        <a href="#"><i class="fa fa-github square"></i></a>
-                        <a href="https://plus.google.com/b/101108467301668768757/+Themesrefinery57/posts"><i class="fa fa-google-plus square"></i></a>
-                    </div>
+					<ul>
+						@foreach($social as $title=>$link)
+							@if($title == 'facebook')
+								<a href="{{ $link }}" target="_blank"><i class="fa fa-facebook square"></i></a>
+							@elseif($title == 'twitter')
+								<a href="{{ $link }}" target="_blank"><i class="fa fa-twitter square"></i></a>
+							@elseif($title == 'linkedin')
+								<a href="{{ $link }}" target="_blank"><i class="fa fa-linkedin square"></i></a>
+							@else
+								<a href="{{ $link }}" target="_blank">{{ $title }}</a>
+							@endif
+						@endforeach
+					</ul>
 					<ul class="nav nav-pills" style="margin-top:2em;">
 					  @foreach($footer_links as $footer_link)
 						<li class="nav-item">
