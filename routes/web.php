@@ -15,6 +15,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Admin\SearchController as SearchPostController;
 use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\PagesController as PagesHomeController;
+use App\Http\Controllers\CommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,6 +38,7 @@ use App\Http\Controllers\PagesController as PagesHomeController;
 Route::get('/',[PostHomeController::class, 'index'])->name('home');
 Route::get('/tag/{slug}',[TagHomeController::class, 'show'])->name('tags.single');
 Route::get('/post/{slug}',[PostHomeController::class, 'show'])->name('posts.single');
+Route::post('/post/{slug}',[PostHomeController::class, 'addComment'])->name('comment.add')->middleware('auth');
 Route::get('/category/{slug}',[CategoryHomeController::class, 'show'])->name('categories.single');
 
 //Slider on main page. It shows a list of certain posts
