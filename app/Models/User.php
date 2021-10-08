@@ -41,4 +41,10 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+	
+	//User has many comments
+	public function comments(){
+		// Comment, 'foreign_key', 'local_key'
+		return $this->hasMany(Comment::class, 'user_id', 'id');
+	}
 }

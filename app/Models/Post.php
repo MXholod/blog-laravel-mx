@@ -68,4 +68,10 @@ class Post extends Model implements HasMedia
 	public function setPostDate(){
 		return Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('d F, Y');
 	}
+	
+	//Post has many comments
+	public function comments(){
+		// Comment, 'foreign_key', 'local_key'
+		return $this->hasMany(Comment::class, 'post_id', 'id');
+	}
 }
