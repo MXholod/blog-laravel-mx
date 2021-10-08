@@ -39,6 +39,17 @@
         <div class="media">
 			{!! $post->content !!}
         </div>
+			@include('site.comments.comment_block', [
+				'post_id' => $post->id,
+				'comments'=> $comments,
+				'slug' => $post->slug,
+				'totalComments' => $totalComments
+			])
+		@guest
+			<p style="text-align:center;color:#f5B3AC;font-size:1.4em;">
+				-- Unauthenticated users cannot leave comments --
+			</p>
+		@endguest
 		@if($post->tags->count())
 			<div class="tags">
 				<span>Tags:</span>
