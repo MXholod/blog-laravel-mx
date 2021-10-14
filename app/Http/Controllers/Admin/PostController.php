@@ -55,7 +55,7 @@ class PostController extends Controller
 		}
 		//$posts = Post::paginate(10);
 		//These are from Post Model 'category', 'tag', 'slider'
-		$posts = Post::with('category', 'tags', 'slider')->paginate(10);
+		$posts = Post::with('category', 'tags', 'slider','comments')->paginate(10);
 		$title = "Post list";
 		return view('admin.posts.index',compact('title','posts'));
     }
@@ -370,4 +370,5 @@ class PostController extends Controller
 		$post->delete();
 		return redirect()->route('posts.index')->with('success', "The post has been deleted");
     }
+	
 }

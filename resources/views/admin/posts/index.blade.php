@@ -36,8 +36,9 @@
 						<tr>
 						  <th style="width: 5%">№ (id)</th>
 						  <th style="width: 15%">Slider (title)</th>
-						  <th style="width: 20%">Post name</th>
-						  <th style="width: 20%">Category</th>
+						  <th style="width: 15%">Post name</th>
+						  <th style="width: 10%">Comments</th>
+						  <th style="width: 15%">Category</th>
 						  <th style="width: 15%">Tags</th>
 						  <th style="width: 5%">Views</th>
 						  <th style="width: 10%">Date</th>
@@ -55,6 +56,9 @@
 							  @endif
 						  </td>
 						  <td>{{ $post->title }}</td>
+						  <td>
+							{{ $post->comments->count() }}
+						  </td>
 						  <td>
 							{{ $post->category->title }}
 						  </td>
