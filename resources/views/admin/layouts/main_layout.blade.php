@@ -49,5 +49,6 @@
 		});
 	});
 </script>
+@stack('scripts_bottom')
 </body>
 </html>
