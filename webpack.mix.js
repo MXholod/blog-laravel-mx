@@ -53,7 +53,12 @@ mix.styles([
 	'resources/assets/admin/css/select2/select2-bootstrap4.min.css',
 	'resources/assets/admin/css/select2/select2.min.css'
 ], 'public/assets/site/css/admin.css');
-// Преобразовываем SASS в CSS
+// Преобразовываем SASS в CSS on Admin side
+mix.sass(
+    'resources/assets/admin/scss/main.scss', // Путь относительно каталога с webpack.mix.js
+    'public/assets/admin/css/' // Путь относительно каталога с webpack.mix.js
+)
+// Преобразовываем SASS в CSS on Client side
 mix.sass(
     'resources/assets/site/scss/main.scss', // Путь относительно каталога с webpack.mix.js
     'public/assets/site/css/' // Путь относительно каталога с webpack.mix.js

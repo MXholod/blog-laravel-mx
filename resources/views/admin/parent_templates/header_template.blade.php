@@ -9,3 +9,4 @@
   <!--<link rel="stylesheet" href="../../dist/css/adminlte.min.css">-->
   <!--<link rel="stylesheet" href="{{ asset('assets/admin/css/admin.css') }}" />-->
   <link rel="stylesheet" href="{{ mix('assets/admin/css/admin.css') }}" />
+  <link rel="stylesheet" href="{{ mix('assets/admin/css/main.css') }}" />
