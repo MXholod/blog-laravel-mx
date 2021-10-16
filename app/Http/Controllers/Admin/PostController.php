@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Models\Tag;
 use App\Models\Slider;
+use App\Models\Comment;
 
 use Illuminate\Support\Facades\DB;
 
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
+	private $commentsAmount = 5;
     /**
      * Display a listing of the resource.
      *
@@ -169,16 +171,25 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
-		$post = Post::find($id);
-		//Get only 'title' and 'id' from Categories table. Where 'id' - from 'category_id' Posts table
-		$categories = Category::pluck('title','id')->all(); //Array as result where 'title' - value and 'id' - key 
-		$tags = Tag::pluck('title','id')->all(); //Array as result where 'title' - value and 'id' - key
-        //
-		$title = "Edit chosen post";
-		
-		return view('admin.posts.edit', compact('title', 'post', 'categories', 'tags'));
+		//If Ajax Request get only comments
+		if($request->ajax()){
+			//Get all last comments
+			$post = Post::where('id', $id)->first();
+			$comments = $post->comments()->orderBy('created_at', 'desc')->paginate($this->commentsAmount);
+			return view('admin.comments.comment_list', compact('comments', 'id'))->render();
+		}else{//If Synchronous Request
+			$post = Post::find($id);
+			//Get only 'title' and 'id' from Categories table. Where 'id' - from 'category_id' Posts table
+			$categories = Category::pluck('title','id')->all(); //Array as result where 'title' - value and 'id' - key 
+			$tags = Tag::pluck('title','id')->all(); //Array as result where 'title' - value and 'id' - key
+			//Get a portion of 5 comments to the current post
+			$comments = $post->comments()->orderBy('created_at', 'desc')->paginate($this->commentsAmount);
+			$title = "Edit chosen post";
+			
+			return view('admin.posts.edit', compact('title', 'post', 'categories', 'tags', 'comments'));
+		}
     }
 	
 	public function image_edit(Request $request){
@@ -371,4 +382,29 @@ class PostController extends Controller
 		return redirect()->route('posts.index')->with('success', "The post has been deleted");
     }
 	
+	//Delete chosen comment of the post with AJAX
+	public function delete_post_comment(Request $request, $id, $commentId){
+		//Check if AJAX
+		if($request->ajax()){
+			if($request->isMethod('delete')){
+				$commId = $request->input('comment_id');
+				$userId = $request->input('user_id');
+				$post_id = $request->input('post_id');
+				//Find a comment
+				$comment = Comment::find($commId);
+				//Delete the comment
+				$comment->delete();
+				//Get a post by 'id'
+				$post = Post::where('id', $post_id)->first();
+				//Get last five comments related to the post
+				$comments = $post->comments()->orderBy('created_at', 'desc')->paginate($this->commentsAmount);
+				//Compile view with comments after the one was deleted
+				return view('admin.comments.comment_list', compact('comments', 'id'))->render();
+			}else{
+				return response()->json([
+					'data' => "Bad request"
+				]);
+			}
+		}
+	}
 }
