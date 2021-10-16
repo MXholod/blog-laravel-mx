@@ -59,6 +59,8 @@ Route::prefix('management')->group(function(){
 		//XMLHttpRequest route. CKEditor image store
 		Route::post('/posts/image_store', [PostController::class, 'image_store'])->name('admin.image_upload.store');//XMLHttpRequest route. CKEditor image edit
 		Route::post('/posts/image_edit', [PostController::class, 'image_edit'])->name('admin.image_upload.edit');
+		//XMLHttpRequest route. Delete chosen comment of a post
+		Route::delete('/posts/{id}/edit/{commentId}', [PostController::class, 'delete_post_comment'])->name('admin.post_comment.delete');
 		//Slider gallery
 		Route::resource('/slider', SliderController::class);
 		Route::resource('/pages', PagesController::class);
