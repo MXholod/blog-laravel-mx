@@ -85,6 +85,8 @@
 		//Create a new comment using the POST AJAX method
 		$('#submit').on('click', function(e){
 			e.preventDefault();
+			//Blocking the 'submit' button
+			$('#submit').attr('disabled', 'disabled');
 			//Collect all the data from the comment form 
 			const _token = $("input[name=_token]").val();
 			const user_id = $("input[name=user_id]").val();
@@ -120,9 +122,11 @@
 						$('#comment_list').html(data);
 						//Add 'click' event to all '.page-link' class and 'preventDefault'
 						processLinks();
-						$('.commentAdded').show().delay(3000).queue(function(){
-							$(this).hide();
-						});
+						$('.commentAdded').show();
+						window.setTimeout(()=>{
+							$('.commentAdded').hide();
+							$('#submit').removeAttr('disabled');
+						},3000);
 					}
 					//Reset 'textarea' field
 					$("#comment").val('');
