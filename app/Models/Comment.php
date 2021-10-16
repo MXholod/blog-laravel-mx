@@ -25,4 +25,28 @@ class Comment extends Model
 	public function setCommenttDate(){
 		return Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('d F, Y');
 	}
+	//Creating the initial part of the comment
+	public function initialPartOfComment(){
+		$minLimitCharacters = 15;
+		$maxLimitCharacters = 40;
+		//
+		$commentLength = strlen($this->comment);
+		
+		if($commentLength == 0){
+			return 'Comment text is absent';
+		}else if($commentLength > 0 && ($minLimitCharacters >= $commentLength)){
+			return $this->comment.' ...';
+		}else{//Here is more characters than in $commentLength
+			$percentage = $commentLength * 30 / 100;//30% from full length of comment. 30% = 50 characters
+			$roundedCommentLength = round($percentage, 0, PHP_ROUND_HALF_UP);
+			//x <= 15
+			if($roundedCommentLength <= $minLimitCharacters){
+				return substr($this->comment, 0, $minLimitCharacters).' ...';
+				//x > 15 && x <= 40
+			}else if($roundedCommentLength > $minLimitCharacters){
+				//Here more than 50 characters cut first 40
+				return substr($this->comment, 0, $maxLimitCharacters).' ...';
+			}
+		}
+	}
 }
