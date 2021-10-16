@@ -90,6 +90,22 @@
               </form>
             </div>
     <!-- /.content -->
+    <!-- comments -->
+	<div class="container">
+		<div class="row">
+			<div class="col">
+				@if($comments->count())
+					@include('admin.comments.comment_block', ['comments' => $comments, 'id' => $post->id]) 
+				@else
+					<p id="noComments" style="text-align:center;">
+						<b style="background:#f6f6f6;border-radius:5px;padding:4px 20px;">
+						There are no comments for this post</b>
+					</p>
+				@endif
+			</div>
+		</div>
+	</div>
+    <!-- end comments -->
   </div>
 @endsection
 
