@@ -29,27 +29,32 @@
         </div>
         <div class="card-body">
 			<div class="container">
-			  <b class="ml-2 pr-2">Total amount of:</b> Categories, Posts, Tags and Sliders in this application
-			  <table class="table table-striped table-bordered mt-3">
-				  <thead>
-					<tr>
-					  <th scope="col" style="width:20%">Categories</th>
-					  <th scope="col" style="width:20%">Posts</th>
-					  <th scope="col" style="width:20%">Tags</th>
-					  <th scope="col" style="width:20%">Slides</th>
-					  <th scope="col" style="width:20%">Pages</th>
-					</tr>
-				  </thead>
-				  <tbody>
-					<tr>
-					  <th scope="row">{{ $categories->count() }}</th>
-					  <td>{{ $posts->count() }}</td>
-					  <td>{{ $tags->count() }}</td>
-					  <td>{{ $sliders->count() }}</td>
-					  <td>{{ $pages->count() }}</td>
-					</tr>
-				  </tbody>
-				</table>
+				<div class="row">
+				    <b class="ml-2 pr-2">Total amount of:</b> Categories, Posts, Tags, Sliders and Pages in this application
+				    <table class="table table-striped table-bordered mt-3">
+					  <thead>
+						<tr>
+						  <th scope="col" style="width:20%">Categories</th>
+						  <th scope="col" style="width:20%">Posts</th>
+						  <th scope="col" style="width:20%">Tags</th>
+						  <th scope="col" style="width:20%">Slides</th>
+						  <th scope="col" style="width:20%">Pages</th>
+						</tr>
+					  </thead>
+					  <tbody>
+						<tr>
+						  <th scope="row">{{ $categories->count() }}</th>
+						  <td>{{ $posts->count() }}</td>
+						  <td>{{ $tags->count() }}</td>
+						  <td>{{ $sliders->count() }}</td>
+						  <td>{{ $pages->count() }}</td>
+						</tr>
+					  </tbody>
+					</table>
+				</div>
+				<div class="row">
+					@include('admin.logo.logo_management', ['logo' => $logo])
+				</div>
 			</div>
         </div>
         <!-- /.card-body -->
