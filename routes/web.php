@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\SearchController as SearchPostController;
 use App\Http\Controllers\Admin\PagesController;
 use App\Http\Controllers\PagesController as PagesHomeController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\Admin\LogoController;
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +65,8 @@ Route::prefix('management')->group(function(){
 		//Slider gallery
 		Route::resource('/slider', SliderController::class);
 		Route::resource('/pages', PagesController::class);
+		Route::post('/logo', [LogoController::class, 'store'])->name('logo.store');
+		Route::delete('/logo/{id}', [LogoController::class, 'destroy'])->name('logo.destroy');
 	});
 });
 
