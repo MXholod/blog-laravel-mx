@@ -1,9 +1,36 @@
-<header class="header">
+<header class="header @if(isset($header_logo[0]) && $header_logo[0]->logo_size == 'm') {{ 'header-and-logo'}} @endif">
 	<div class="container">
     	<nav class="navbar navbar-inverse" role="navigation">
         	<div class="navbar-header">
             	<button type="button" id="nav-toggle" class="navbar-toggle" data-toggle="collapse" data-target="#main-nav"> <span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
-                <a href="{{ route('home') }}" class="navbar-brand scroll-top logo animated bounceInLeft rollIn"><b><i class="fa fa-html5">Your Logo</i></b></a>
+                <a href="{{ route('home') }}" class="navbar-brand scroll-top logo animated bounceInLeft rollIn">
+					@if(isset($header_logo[0]))
+						@switch($header_logo[0]->logo_size)
+							@case('s')
+								<img src="{{ url('downloads/'.$header_logo[0]->logo_img) }}" 
+									width="115" 
+									height="50" 
+									alt="{{ $header_logo[0]->logo_title }}" 
+									title="{{ $header_logo[0]->logo_title }}" 
+									class="logo-small"/>
+								@break
+							@case('m')
+								<img src="{{ url('downloads/'.$header_logo[0]->logo_img) }}" 
+									width="160" 
+									height="80" 
+									alt="{{ $header_logo[0]->logo_title }}" 
+									title="{{ $header_logo[0]->logo_title }}" 
+									class="logo-medium"/>
+								@break
+						@endswitch
+					@else
+						<b>
+							<i class="fa fa-html5">
+								{{ env('APP_NAME', 'Your logo here') }}
+							</i>
+						</b>
+					@endif
+				</a>
 			</div>				
             <div id="main-nav" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
