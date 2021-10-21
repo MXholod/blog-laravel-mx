@@ -8,6 +8,7 @@ use App\Models\Page;
 //Social Media Share Buttons
 use Share;
 use Illuminate\Support\Facades\URL;
+use App\Models\Logo;
 
 class ViewServiceProvider extends ServiceProvider
 {
@@ -44,10 +45,12 @@ class ViewServiceProvider extends ServiceProvider
 				array_push($footer, ['title' => $page->title, 'slug' => $page->slug]);
 			}
 		}
+		//Get logo image
+		$logo = Logo::where('logo_img_display',0)->take(1)->get();
         // Header template. Using closure based composers...
-        View::composer('site.parent_templates.header_template', function ($view) use ($header) {
+        View::composer('site.parent_templates.header_template', function ($view) use ($header, $logo) {
             //
-			$view->with('header_links', $header);
+			$view->with('header_links', $header)->with('header_logo', $logo);
         });
 		// Footer template. Using closure based composers...
         View::composer('site.parent_templates.footer_template', function ($view) use ($footer){
