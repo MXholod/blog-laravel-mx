@@ -67,6 +67,10 @@ Route::prefix('management')->group(function(){
 		Route::resource('/pages', PagesController::class);
 		Route::post('/logo', [LogoController::class, 'store'])->name('logo.store');
 		Route::delete('/logo/{id}', [LogoController::class, 'destroy'])->name('logo.destroy');
+		//XMLHttpRequest route. It sets logo visibility
+		Route::patch('/logo/visibility', [LogoController::class, 'logo_visibility'])->name('logo.visibility');
+		//XMLHttpRequest route. It sets logo size: small or medium
+		Route::patch('/logo/size', [LogoController::class, 'logo_size'])->name('logo.size');
 	});
 });
 
