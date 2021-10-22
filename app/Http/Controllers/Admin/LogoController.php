@@ -89,4 +89,37 @@ class LogoController extends Controller
 		return redirect()->route('admin.index')->with('error', "The logo can't be deleted");
 	}
 	
+	//XMLHttpRequest action
+	public function logo_visibility(Request $request){
+		//If Ajax Request get only comments
+		if($request->ajax()){
+			if($request->isMethod('patch')){
+				$id = (int)$request->input('id');
+				if(!empty($id)){
+					$logo = Logo::find($id);
+					$logo->logo_img_display = intval($request->input('value'));
+					$logo->save();
+					return response()->json(["status" => "changed"]);
+				}
+				return response()->json(["status" => "has not changed"]);
+			}
+		}
+	}
+	//XMLHttpRequest action
+	public function logo_size(Request $request){
+		//If Ajax Request get only comments
+		if($request->ajax()){
+			if($request->isMethod('patch')){
+				$id = (int)$request->input('id');
+				if(!empty($id)){
+					$logo = Logo::find($id);
+					$logo->logo_size = $request->input('value');
+					$logo->save();
+					return response()->json(["status" => "changed"]);
+				}
+				return response()->json(["status" => "has not changed"]);
+			}
+		}
+	}
+	
 }
