@@ -35,12 +35,13 @@
 					  <thead>
 						<tr>
 						  <th style="width: 5%">№ (id)</th>
-						  <th style="width: 15%">Slider (title)</th>
+						  <th style="width: 13%">Slider (title)</th>
 						  <th style="width: 15%">Post name</th>
 						  <th style="width: 10%">Comments</th>
 						  <th style="width: 15%">Category</th>
-						  <th style="width: 15%">Tags</th>
+						  <th style="width: 12%">Tags</th>
 						  <th style="width: 5%">Views</th>
+						  <th style="width: 5%">Widgets</th>
 						  <th style="width: 10%">Date</th>
 						  <th style="width: 10%">Actions</th>
 						</tr>
@@ -73,6 +74,9 @@
 							{{ $post->views }}
 						  </td>
 						  <td>
+							{{ $post->widgets()->count() }}
+						  </td>
+						  <td class="date-column">
 							{{ $post->created_at }}
 						  </td>
 						  <td>

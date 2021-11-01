@@ -39,7 +39,8 @@
 						  <th style="width: 20%">Page slug</th>
 						  <th style="width: 15%">Page display</th>
 						  <th style="width: 15%">Displaying place</th>
-						  <th style="width: 15%">Date</th>
+						  <th style="width: 5%">Widgets</th>
+						  <th style="width: 10%">Date</th>
 						  <th style="width: 10%">Actions</th>
 						</tr>
 					  </thead>
@@ -71,6 +72,9 @@
 							@endswitch
 						  </td>
 						  <td>
+							{{ $page->widgets()->count() }}
+						  </td>
+						  <td class="date-column">
 							{{ $page->setPostDate() }}
 						  </td>
 						  <td>
