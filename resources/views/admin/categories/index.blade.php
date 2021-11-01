@@ -35,8 +35,9 @@
 					  <thead>
 						<tr>
 						  <th style="width: 10%">№ (id)</th>
-						  <th style="width: 45%">Category name</th>
+						  <th style="width: 40%">Category name</th>
 						  <th style="width: 30%">Slug</th>
+						  <th style="width: 5%">Widgets</th>
 						  <th style="width: 15%">Actions</th>
 						</tr>
 					  </thead>
@@ -47,6 +48,9 @@
 						  <td>{{ $category->title }}</td>
 						  <td>
 							{{ $category->slug }}
+						  </td>
+						   <td>
+							{{ $category->widgets()->count() }}
 						  </td>
 						  <td>
 							<a href="{{ route('categories.edit', ['category' => $category->id]) }}" class="btn btn-info btn-sm float-left mr-1">
