@@ -62,9 +62,18 @@ Route::prefix('management')->group(function(){
 		Route::post('/posts/image_edit', [PostController::class, 'image_edit'])->name('admin.image_upload.edit');
 		//XMLHttpRequest route. Delete chosen comment of a post
 		Route::delete('/posts/{id}/edit/{commentId}', [PostController::class, 'delete_post_comment'])->name('admin.post_comment.delete');
+		//XMLHttpRequest route. It sets widget
+		Route::post('/posts/widget/widget_store', [PostController::class, 'store_widget'])->name('post.widget.store');
+		Route::patch('/posts/widget/widget_update/{id}', [PostController::class, 'update_widget'])->name('post.widget.update');
+		Route::delete('/posts/widget/widget_destroy/{id}', [PostController::class, 'destroy_widget'])->name('post.widget.destroy');
 		//Slider gallery
 		Route::resource('/slider', SliderController::class);
 		Route::resource('/pages', PagesController::class);
+		//XMLHttpRequest route. It sets widget
+		Route::post('/pages/widget_store', [PagesController::class, 'store_widget'])->name('widget.store');
+		Route::patch('/pages/widget_update/{id}', [PagesController::class, 'update_widget'])->name('widget.update');
+		Route::delete('/pages/widget_destroy/{id}', [PagesController::class, 'destroy_widget'])->name('widget.destroy');
+		//XMLHttpRequest route. It stores and destroys logo
 		Route::post('/logo', [LogoController::class, 'store'])->name('logo.store');
 		Route::delete('/logo/{id}', [LogoController::class, 'destroy'])->name('logo.destroy');
 		//XMLHttpRequest route. It sets logo visibility
