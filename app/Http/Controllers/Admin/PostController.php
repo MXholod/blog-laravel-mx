@@ -10,6 +10,7 @@ use App\Models\Post;
 use App\Models\Tag;
 use App\Models\Slider;
 use App\Models\Comment;
+use App\Models\Widget;
 
 use Illuminate\Support\Facades\DB;
 
@@ -130,6 +131,36 @@ class PostController extends Controller
 		//Flash message another way 'with()' method
 		return redirect()->route('posts.index')->with('success', "The '{$postTitle}' has been added");
     }
+	
+	//AJAX request
+	public function store_widget(Request $request){
+		//Try to add a widget by Ajax
+		if($request->ajax()){
+			//If widget is absent
+			if(is_null($request->input('title')) || is_null($request->input('fullText'))){
+				return response()->json([
+					"incorrect" => "Data is incorrect"
+				]);
+			}
+			$entityId = (int)$request->input('entityId');
+			//Find page
+			$post = Post::find($entityId);
+			//Create widget
+			$widget = new Widget;
+			$widget->title = $request->input('title');
+			$widget->full_text = json_decode($request->input('fullText'));
+			//Save widget with the page
+			$post->widgets()->save($widget);
+			//Get all post widgets
+			$post = Post::where('slug', $post->slug)->first();
+			$widgets = $post->widgets()->orderBy('created_at', 'desc')->get();//->paginate($this->commentsAmount);
+			//Set two route names according to the entity (Post)
+			$routeUpdate = 'post.widget.update';
+			$routeDelete = 'post.widget.destroy';
+			return view('admin.widgets.widget_single_block', compact('entityId', 'routeUpdate', 'routeDelete', 'widgets'))->render();
+		}
+	}
+	
 	/**
      * Upload images by XMLHttpRequest.
      *
@@ -310,6 +341,38 @@ class PostController extends Controller
 		
 		return redirect()->route('posts.index')->with('success', "The '{$tagTitle}' has been updated");
     }
+	
+	//AJAX request
+	public function update_widget(Request $request){
+		//Try to update a widget by Ajax
+		if($request->ajax()){
+			if($request->isMethod('patch')){
+				//If widget is absent
+				if(is_null($request->input('title')) || is_null($request->input('fullText'))){
+					return response()->json([
+						"incorrect" => "Data is incorrect"
+					]);
+				}
+				$idWidget = (int)$request->input('widgetId');
+				//Find widget;
+				$widget = Widget::find($idWidget);
+				$widget->title = $request->input('title');
+				$widget->full_text = json_decode($request->input('fullText'));
+				$widget->save();
+				
+				$entityId = (int)$request->input('entityId');
+				//Find page
+				$post = Post::find($entityId);
+				//Get all page widgets
+				$post = Post::where('slug', $post->slug)->first();
+				$widgets = $post->widgets()->orderBy('created_at', 'desc')->get();//->paginate($this->commentsAmount);
+				//Set two route names according to the entity (Page)
+				$routeUpdate = 'post.widget.update';
+				$routeDelete = 'post.widget.destroy';
+				return view('admin.widgets.widget_single_block', compact('entityId', 'routeUpdate', 'routeDelete', 'widgets'))->render();
+			}
+		}
+	}
 
     /**
      * Remove the specified resource from storage.
@@ -404,6 +467,37 @@ class PostController extends Controller
 				return response()->json([
 					'data' => "Bad request"
 				]);
+			}
+		}
+	}
+	
+	//AJAX request
+	public function destroy_widget(Request $request){
+		//Try to deletion a widget by Ajax
+		if($request->ajax()){
+			if($request->isMethod('delete')){
+				//If widget is absent
+				if(is_null($request->input('entityId')) || is_null($request->input('widgetId'))){
+					return response()->json([
+						"incorrect" => "Data is incorrect"
+					]);
+				}
+				$idWidget = (int)$request->input('widgetId');
+				$entityId = (int)$request->input('entityId');
+				//Find page
+				$post = Post::find($entityId);
+				//Delete widget in 'widgets' table 
+				$post->widgets()->where('id', '=', $idWidget)->delete();
+				// Detach a single widget from the page...
+				$post->widgets()->detach($idWidget);
+				
+				//Get all post widgets
+				$post = Post::where('slug', $post->slug)->first();
+				$widgets = $post->widgets()->orderBy('created_at', 'desc')->get();//->paginate($this->commentsAmount);
+				//Set two route names according to the entity (Post)
+				$routeUpdate = 'post.widget.update';
+				$routeDelete = 'post.widget.destroy';
+				return view('admin.widgets.widget_single_block', compact('entityId', 'routeUpdate', 'routeDelete', 'widgets'))->render();
 			}
 		}
 	}

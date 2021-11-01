@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Page;
+use App\Models\Widget;
 //This Facade is for deleting images
 use Illuminate\Support\Facades\Storage;
 
@@ -65,6 +66,40 @@ class PagesController extends Controller
 		//Flash message another way 'with()' method
 		return redirect()->route('pages.index')->with('success', "The '{$pageTitle}' has been added");
     }
+	
+	//AJAX request
+	public function store_widget(Request $request){
+		//Try to add a widget by Ajax
+		if($request->ajax()){
+			//If widget is absent
+			if(is_null($request->input('title')) || is_null($request->input('fullText'))){
+				return response()->json([
+					"incorrect" => "Data is incorrect"
+				]);
+			}
+			$entityId = (int)$request->input('entityId');
+			//Find page
+			$page = Page::find($entityId);
+			//Create widget
+			$widget = new Widget;
+			$widget->title = $request->input('title');
+			$widget->full_text = json_decode($request->input('fullText'));
+			//Save widget with the page
+			$page->widgets()->save($widget);
+			
+			/*return response()->json([
+				"status" => "Widget added to the page"
+			]);*/
+			
+			//Get all page widgets
+			$page = Page::where('slug', $page->slug)->first();
+			$widgets = $page->widgets()->orderBy('created_at', 'desc')->get();//->paginate($this->commentsAmount);
+			//Set two route names according to the entity (Page)
+			$routeUpdate = 'widget.update';
+			$routeDelete = 'widget.destroy';
+			return view('admin.widgets.widget_single_block', compact('entityId', 'routeUpdate', 'routeDelete', 'widgets'))->render();
+		}
+	}
 
     /**
      * Display the specified resource.
@@ -131,6 +166,38 @@ class PagesController extends Controller
 		
 		return redirect()->route('pages.index')->with('success', "The '{$title}' has been updated");
     }
+	
+	//AJAX request
+	public function update_widget(Request $request){
+		//Try to update a widget by Ajax
+		if($request->ajax()){
+			if($request->isMethod('patch')){
+				//If widget is absent
+				if(is_null($request->input('title')) || is_null($request->input('fullText'))){
+					return response()->json([
+						"incorrect" => "Data is incorrect"
+					]);
+				}
+				$idWidget = (int)$request->input('widgetId');
+				//Find widget;
+				$widget = Widget::find($idWidget);
+				$widget->title = $request->input('title');
+				$widget->full_text = json_decode($request->input('fullText'));
+				$widget->save();
+				
+				$entityId = (int)$request->input('entityId');
+				//Find page
+				$page = Page::find($entityId);
+				//Get all page widgets
+				$page = Page::where('slug', $page->slug)->first();
+				$widgets = $page->widgets()->orderBy('created_at', 'desc')->get();//->paginate($this->commentsAmount);
+				//Set two route names according to the entity (Page)
+				$routeUpdate = 'widget.update';
+				$routeDelete = 'widget.destroy';
+				return view('admin.widgets.widget_single_block', compact('entityId', 'routeUpdate', 'routeDelete', 'widgets'))->render();
+			}
+		}
+	}
 
     /**
      * Remove the specified resource from storage.
@@ -162,4 +229,35 @@ class PagesController extends Controller
 		$page->delete();
 		return redirect()->route('pages.index')->with('success', "The page has been deleted");
     }
+	
+	//AJAX request
+	public function destroy_widget(Request $request){
+		//Try to deletion a widget by Ajax
+		if($request->ajax()){
+			if($request->isMethod('delete')){
+				//If widget is absent
+				if(is_null($request->input('entityId')) || is_null($request->input('widgetId'))){
+					return response()->json([
+						"incorrect" => "Data is incorrect"
+					]);
+				}
+				$idWidget = (int)$request->input('widgetId');
+				$entityId = (int)$request->input('entityId');
+				//Find page
+				$page = Page::find($entityId);
+				//Delete widget in 'widgets' table 
+				$page->widgets()->where('id', '=', $idWidget)->delete();
+				// Detach a single widget from the page...
+				$page->widgets()->detach($idWidget);
+				
+				//Get all page widgets
+				$page = Page::where('slug', $page->slug)->first();
+				$widgets = $page->widgets()->orderBy('created_at', 'desc')->get();//->paginate($this->commentsAmount);
+				//Set two route names according to the entity (Page)
+				$routeUpdate = 'widget.update';
+				$routeDelete = 'widget.destroy';
+				return view('admin.widgets.widget_single_block', compact('entityId', 'routeUpdate', 'routeDelete', 'widgets'))->render();
+			}
+		}
+	}
 }
