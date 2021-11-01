@@ -55,6 +55,10 @@ Route::prefix('management')->group(function(){
 		//Search posts by title on the client side
 		Route::get('/search',[SearchPostController::class, 'index'])->name('admin.posts.search');
 		Route::resource('/categories', CategoryController::class);
+		//XMLHttpRequest route. It sets widget
+		Route::post('/categories/widget/widget_store', [CategoryController::class, 'store_widget'])->name('category.widget.store');
+		Route::patch('/categories/widget/widget_update/{id}', [CategoryController::class, 'update_widget'])->name('category.widget.update');
+		Route::delete('/categories/widget/widget_destroy/{id}', [CategoryController::class, 'destroy_widget'])->name('category.widget.destroy');
 		Route::resource('/tags', TagController::class);
 		Route::resource('/posts', PostController::class);
 		//XMLHttpRequest route. CKEditor image store
