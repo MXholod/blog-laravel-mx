@@ -44,4 +44,13 @@ class Page extends Model
 	public function setPostDate(){
 		return Carbon::createFromFormat('Y-m-d H:i:s', $this->created_at)->format('d F, Y');
 	}
+	
+	/**
+     * Get all of the widgets for the page.
+     */
+    public function widgets()
+    {
+		//Many To Many (Polymorphic)
+        return $this->morphToMany(Widget::class, 'widgetable');
+    }
 }

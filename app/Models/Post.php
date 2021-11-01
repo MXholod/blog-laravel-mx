@@ -74,4 +74,12 @@ class Post extends Model implements HasMedia
 		// Comment, 'foreign_key', 'local_key'
 		return $this->hasMany(Comment::class, 'post_id', 'id');
 	}
+	/**
+     * Get all of the widgets for the page.
+     */
+    public function widgets()
+    {
+		//Many To Many (Polymorphic)
+        return $this->morphToMany(Widget::class, 'widgetable');
+    }
 }
