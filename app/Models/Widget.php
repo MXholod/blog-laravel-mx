@@ -32,4 +32,12 @@ class Widget extends Model
 		//Many To Many (Polymorphic)
         return $this->morphedByMany(Post::class, 'widgetable');
     }
+	/**
+     * Get all of the pages that are assigned this widget.
+     */
+    public function categories()
+    {
+		//Many To Many (Polymorphic)
+        return $this->morphedByMany(Category::class, 'widgetable');
+    }
 }

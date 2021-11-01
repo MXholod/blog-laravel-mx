@@ -34,4 +34,13 @@ class Category extends Model
 	public function posts(){
 		return $this->hasMany(Post::class);
 	}
+	
+	/**
+     * Get all of the widgets for the page.
+     */
+    public function widgets()
+    {
+		//Many To Many (Polymorphic)
+        return $this->morphToMany(Widget::class, 'widgetable');
+    }
 }
