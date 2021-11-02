@@ -53,7 +53,7 @@
 				<ul class="nav navbar-nav" id="mainNav">
                   <li class="active"><a href="{{ route('home') }}">Home</a></li>
 				  @foreach($header_links as $header_link)
-					<li><a href="{{ $header_link['slug'] }}">{{ $header_link['title'] }}</a></li>
+					<li><a href="/{{ $header_link['slug'] }}">{{ $header_link['title'] }}</a></li>
 				  @endforeach
                 </ul>
             </div>    
