@@ -42,9 +42,30 @@
                     <!-- /.row -->
                 </div>
 				@endif
-                <!-- Side Widget Well -->
-                <div class="well">
-                    <h4>Side Widget Well</h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, perspiciatis adipisci accusamus laudantium odit aliquam repellat tempore quos aspernatur vero.</p>
-                </div>
+                <!-- Side Widget -->
+				@if(isset($page_widgets) && $page_widgets->count())
+					@foreach($page_widgets as $k=>$v)
+						<div class="well">
+							<h4 class="well__widget-header">{{ $k }}</h4>
+							<div class="well__widget-content">{!! $v !!}</div>
+						</div>
+					@endforeach
+				@endif
+				@if(isset($post_widgets) && $post_widgets->count())
+					@foreach($post_widgets as $k=>$v)
+						<div class="well">
+							<h4 class="well__widget-header">{{ $k }}</h4>
+							<div class="well__widget-content">{!! $v !!}</div>
+						</div>
+					@endforeach
+				@endif
+				@if(isset($category_widgets) && $category_widgets->count())
+					@foreach($category_widgets as $k=>$v)
+						<div class="well">
+							<h4 class="well__widget-header">{{ $k }}</h4>
+							<div class="well__widget-content">{!! $v !!}</div>
+						</div>
+					@endforeach
+				@endif
+				<!-- End of Side Widget -->
 </div>
