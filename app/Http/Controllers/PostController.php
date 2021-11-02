@@ -29,13 +29,20 @@ class PostController extends Controller
 		}else{//If Synchronous Request
 			//Get requested 'post' or 404 error 
 			$post = Post::where('slug', $slug)->firstOrFail();
+			//Get widgets for post
+			if(!is_null($post)){
+				$postWidgets = Post::find($post->id);//->get();
+			}
+			//Form an array of widgets where key is a 'title' and 'value' is a 'full_text'
+			$post_widgets = $postWidgets->widgets->pluck('full_text', 'title');
+			//Count all comments for the post
 			$totalComments = $post->comments()->count();
 			//dd($totalComments);
 			$comments = $post->comments()->orderBy('created_at', 'desc')->paginate($this->commentsAmount);
 			//We increment amount of views and update the post
 			$post->views += 1;
 			$post->update();
-			return view('site.posts.show', compact('post', 'comments', 'totalComments'));
+			return view('site.posts.show', compact('post', 'comments', 'totalComments', 'post_widgets'));
 		}
 	}
 	
