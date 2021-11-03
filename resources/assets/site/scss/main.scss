@@ -1,0 +1,198 @@
+@import 'all_imports';
+
+$bg-color: #fcfcff;
+
+body{
+	background-color:$bg-color;
+	/*Logo for the site*/
+	.logo-small{
+	    position: relative;
+		top: -10px;
+	}
+	.logo-medium{
+		position: relative;
+		top: -10px;
+	}
+	.header-and-logo{
+		position: relative;
+		z-index: 1;
+		.navbar-header a{
+			display:inline-block;
+			background-color:$bg-color;
+			position: absolute;
+			top:1px;
+			height: 90px;
+			border-bottom-left-radius: 10px;
+			border-bottom-right-radius: 10px;
+			&:hover{
+				display: inline-block;
+				background: #fcfcff;
+			}
+		}
+	}
+	/*End logo for the site*/
+	/*User authentication*/
+	#mainNavDropDown.active .dropdown > a, #mainNavDropDownMenu .active a{
+		color: #EC7568!important;
+		background-color: transparent!important;
+	}
+	#mainNavDropDownMenu {
+		.user-name{
+			padding: 1px 1px 1px 10px;
+			font-weight:bold;
+		}
+	}
+	%auth-form{
+		margin: 5% 0% 0% 20%;
+		form{
+			max-width: 70%;
+			background-color: #f5f5f5;
+			border: 1px solid #e3e3e3;
+			border-radius: 4px;
+			padding: .5em;
+			.input-group{
+				margin-left: 20%;
+				.input-group-text{
+					span{
+						position: relative;
+						width: 10px;
+						height: 10px;
+						top: -30px;
+						left: 105%;
+					}
+				}
+			}
+			.sign-up__btn, .sign-in__btn{
+				margin: 2em;
+			}
+		}
+	}
+	.sign-in{
+		.register-logo{
+			margin-bottom:.5em;
+			b{
+				font-size: 1.5em;
+			}
+		} 
+		@extend %auth-form;
+	}
+	.sign-up{
+		.register-logo{
+			margin-bottom:.5em;
+			b{
+				font-size: 1.5em;
+			}
+		}
+		@extend %auth-form;
+	}
+	/*End user authentication*/
+	.slider-post-link{
+		display:block;
+		width:100%;
+		height:20%;
+		position:absolute;
+		bottom:0;
+		font-size:2em;
+		padding-right:1em;
+		text-decoration:underline;
+		padding-top:.5em;
+		color:#fff;
+		font-weight:bold;
+		text-align:right;
+	}
+	.tags{
+		padding-bottom:1em;
+		span:first-child{
+			font-weight:bold;
+			background-color: lighten(#ec7568, 15%);
+			padding: 2px 1em 3px 10px;
+			color:#000;
+		}
+		span{ 
+			font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+			font-size: 1.1em;
+			color: #ec7568;
+			padding-left:5px;
+		}
+	}
+	/*Form for search*/
+	.form-search{
+		display:flex;
+		.wrong-search{
+			border:2px solid red;
+		}
+	}
+	/*End form for search*/
+	/*Footer*/
+	.list-unstyled .popular-post-views{
+		padding-left: 2em;
+	}
+	/*Footer end*/
+	/*Comment*/
+	#comment_list{
+		& > li:nth-child(2n + 1){
+			background-color: #f2f4f7;
+		}
+		& > li:nth-child(2n + 2){
+			background-color: #e3f5fa;
+		}
+		& > li{
+			border: 1px solid #92a7ad;
+			list-style-type: none;
+			margin-bottom:.5em;
+			div:first-child{
+				display:flex;
+				justify-content: space-between;
+				padding:0 5px;
+				span:first-child{
+					font-weight:bold;
+				}
+				span:last-child{
+					text-decoration:underline;
+				}
+			}
+			div:last-child{
+				padding:.5em;
+				background-color:#dfe3eb;
+			}
+		}
+	}
+	.comments__list{
+		margin-bottom: 3em;
+	}
+	.commentAbsent{
+		width: 300px;
+		position: relative;
+		top: -25px;
+		left: 30%;
+		color: #a94442;
+		background-color: #f2dede;
+		border-color: #ebccd1;
+		padding: 2px 5px;
+		text-align: center;
+		border-radius: 5px;
+	}
+	.commentAdded{
+		width: 300px;
+		position: relative;
+		top: -25px;
+		left: 30%;
+		color: #0d6345;
+		background-color: #82ffd3;
+		border-color: #ebccd1;
+		padding: 2px 5px;
+		text-align: center;
+		border-radius: 5px;
+	}
+	/*Edd Comment*/
+	/*Widget*/
+	.well{
+		.well__widget-header{
+			text-align:center;
+		}
+		.well__widget-content{
+			text-indent: .8em;
+		}
+	}
+	/*End Widget*/
+}
